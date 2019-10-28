@@ -13,7 +13,8 @@ class BookList extends React.Component {
                         books={this.props.books}
                         bookTypeFilter={this.props.bookTypeFilter} 
                         printTypeFilter={this.props.printTypeFilter}
-                        selected={this.props.selected}                                                                      
+                        selected={this.props.selected} 
+                        handleClick={this.props.handleClick}                                                                     
                     />
                 </ul>
             </section>

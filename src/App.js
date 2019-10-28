@@ -78,12 +78,6 @@ class App extends React.Component {
       .catch()
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevState.searchTerm !== this.state.searchTerm) {
-  //       this.getBooks()
-  //   }
-  // }
-
   changePrintType = (printTypeFilter) => {
     console.log('change print Type')
     this.setState({
@@ -91,25 +85,25 @@ class App extends React.Component {
     })
   }
 
-  // changeBookType= () => {
-
-  // }
-  
   searchTermChanged = (newSearchTerm) => {
     this.setState({
         searchTerm: newSearchTerm
     })
-}
+  }
 
   newSearch = (e) => {
     e.preventDefault();
-    this.getBooks();
-    // const newSearchTerm = e.target.value
-    // this.setState({
-    //   searchTerm: newSearchTerm
-    // })
+    this.getBooks();   
   }
   
+  showDetails = (selected) => {
+    console.log('details')
+    const showing = this.state.selected !== selected
+      ? selected
+      : null    
+    this.setState({ selected: showing })
+  }
+
   render() {
     console.log('rendered app')
     return (
@@ -132,6 +126,7 @@ class App extends React.Component {
         bookTypeFilter={this.state.bookTypeFilter} 
         printTypeFilter={this.state.printTypeFilter}
         selected={this.state.selected}
+        handleClick={this.showDetails}
       /> 
     </main>
     );

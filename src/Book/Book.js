@@ -16,9 +16,10 @@ class Book extends React.Component {
             : ""
         const auth = this.props.book.volumeInfo.authors
             ? <p>Author: {this.props.book.volumeInfo.authors[0]}</p>
-            : <p>Magaine Publication</p> 
+            : <p>Magaine Publication</p>
+        const title = this.props.book.volumeInfo.title
         return (
-            <li className="Book" key={this.props.id}>
+            <li className="Book" key={this.props.id} onClick={e => this.props.handleClick(title)}>
                 <h2>{this.props.book.volumeInfo.title}</h2>
                 <div className="book_info">
                     <div className="book_img">

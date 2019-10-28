@@ -9,7 +9,7 @@ class Books extends React.Component {
         const books = this.props.books.map((book, i) => {            
             return   this.props.selected === book.volumeInfo.title
                 ? <Details book={book} key={i} id={i}/>
-                : <Book book={book} key={i} id={i}/>
+                : <Book book={book} key={i} id={i} handleClick={this.props.handleClick}/>
         })
         console.log(books)
      return books;
