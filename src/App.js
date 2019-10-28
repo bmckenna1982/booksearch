@@ -1,26 +1,142 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Header from './Header/Header.js';
+import SearchBar from './SearchBar/SearchBar';
+import FilterBar from './FilterBar/FilterBar';
+import BookList from './BookList/BookList';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const url = 'https://www.googleapis.com/books/v1/volumes'
+const key = 'AIzaSyCbgxwYNQS_GIb7ofgXuDwacktNVO7sh1E'
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      books: [],
+      searchTerm: "henry",
+      bookTypeFilter: null,
+      printTypeFilter: null,
+      selected: null    
+    }
+  }
+  
+  componentDidMount = () => {
+    console.log('component mounted')
+    this.getBooks()
+    // const bookFilter = this.state.bookTypeFilter
+    //   ? `&filter=${this.state.bookTypeFilter}`
+    //   : ""
+    // const printFilter = this.state.printTypeFilter
+    //   ? `&printType=${this.state.printTypeFilter}`
+    //   : ""
+    //   console.log(printFilter)
+    // const fetchUrl = url + '?q=' + this.state.searchTerm + bookFilter + printFilter
+    
+    
+    // fetch(fetchUrl)
+    //   .then(response => {
+    //     console.log(fetchUrl)
+    //     if (response.ok) {
+    //       return response.json()
+    //     }
+    //     throw new Error('Something went wrong');
+    //   })
+    //   .then(responseJson => {
+    //     this.setState({
+    //       books: responseJson.items
+    //     })
+    //     console.log(this.state.books)
+    //   })  
+    //   .catch()
+  }
+
+  getBooks = () => {
+    const bookFilter = this.state.bookTypeFilter
+      ? `&filter=${this.state.bookTypeFilter}`
+      : ""
+    const printFilter = this.state.printTypeFilter
+      ? `&printType=${this.state.printTypeFilter}`
+      : ""
+      console.log(printFilter)
+    const fetchUrl = url + '?q=' + this.state.searchTerm + bookFilter + printFilter
+    
+    
+    fetch(fetchUrl)
+      .then(response => {
+        console.log(fetchUrl)
+        if (response.ok) {
+          return response.json()
+        }
+        throw new Error('Something went wrong');
+      })
+      .then(responseJson => {
+        this.setState({
+          books: responseJson.items
+        })
+        console.log(this.state.books)
+      })  
+      .catch()
+  }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.searchTerm !== this.state.searchTerm) {
+  //       this.getBooks()
+  //   }
+  // }
+
+  changePrintType = (printTypeFilter) => {
+    console.log('change print Type')
+    this.setState({
+      printTypeFilter
+    })
+  }
+
+  // changeBookType= () => {
+
+  // }
+  
+  searchTermChanged = (newSearchTerm) => {
+    this.setState({
+        searchTerm: newSearchTerm
+    })
 }
+
+  newSearch = (e) => {
+    e.preventDefault();
+    this.getBooks();
+    // const newSearchTerm = e.target.value
+    // this.setState({
+    //   searchTerm: newSearchTerm
+    // })
+  }
+  
+  render() {
+    console.log('rendered app')
+    return (
+    <main className="App">
+      <Header />
+      <SearchBar 
+        searchTerm={this.state.searchTerm}
+        handleSearch={this.newSearch}
+        handleNewTerm={this.searchTermChanged}
+        handleSubmit={this.newSearch}
+      />
+      <FilterBar 
+        bookTypeFilter={this.state.bookTypeFilter} 
+        printTypeFilter={this.state.printTypeFilter}
+        handleFilter={this.changeFilter}
+        handlePrintType={this.changePrintType}
+      />
+      <BookList 
+        books={this.state.books}
+        bookTypeFilter={this.state.bookTypeFilter} 
+        printTypeFilter={this.state.printTypeFilter}
+        selected={this.state.selected}
+      /> 
+    </main>
+    );
+  }
+}
+
 
 export default App;
